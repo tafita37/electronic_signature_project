@@ -1,0 +1,49 @@
+{% extends 'base.html' %} 
+
+{% block title %}File to sign{% endblock %}
+
+{% block content %}
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-6 grid-margin stretch-card mx-auto">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Upload the file to sign</h4>
+            <p class="card-description">File to sign</p>
+            <form class="forms-sample" enctype="multipart/form-data" method="post" action="{% url 'upload_file_to_sign' %}">
+              {% csrf_token %}
+              <div class="form-group">
+                <label>File to sign</label>
+                <input
+                  type="file"
+                  name="file_to_sign"
+                  class="file-upload-default"
+                  accept=".txt"
+                />
+                <div class="input-group col-xs-12">
+                  <input
+                    type="text"
+                    class="form-control file-upload-info"
+                    disabled
+                    placeholder="Upload txt file"
+                  />
+                  <span class="input-group-append">
+                    <button
+                      class="file-upload-browse btn btn-primary"
+                      type="button"
+                    >
+                      Upload
+                    </button>
+                  </span>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary mr-2">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
