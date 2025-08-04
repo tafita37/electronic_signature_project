@@ -1,0 +1,12 @@
+Cours 17 Base de donnée des entreprises
+
+Gestion de sécurité :
+	- Spécifier les utilisateurs pouvant se connecter à la base
+	- Tablespace que l'utilisateur peut accéder
+	- limitation de ressource système
+	- politique de gestion de mot de passe
+	- droit de chaque utilisateur
+
+Profil utilisateur :
+	- Limitation de ressources 
+	- 

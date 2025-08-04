@@ -1,3 +1,4 @@
 {
-    "tafita": "tafita_public.pem"
+    "tafita": "tafita_public.pem",
+    "test": "test_public.pem"
 }
