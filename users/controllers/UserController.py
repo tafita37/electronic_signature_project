@@ -15,6 +15,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.exceptions import InvalidSignature
+from django.contrib import messages
 
 @require_GET
 def register_user_page(request):
@@ -240,7 +241,7 @@ def check_signature(request):
             mgf=padding.MGF1(hashes.SHA256()),
             salt_length=padding.PSS.MAX_LENGTH
         ), hashes.SHA256())
-        print("Signature VALIDE")
+        messages.success(request, "Signature VALIDE")
     except InvalidSignature:
-        print("Signature INVALIDE")
+        messages.success(request, "Signature INVALIDE")
     return redirect('list_file_page')
