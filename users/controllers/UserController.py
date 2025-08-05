@@ -14,6 +14,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import hashes
+from cryptography.exceptions import InvalidSignature
 
 @require_GET
 def register_user_page(request):
@@ -207,4 +208,39 @@ def sign_file(request):
         
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(signature_files, f, ensure_ascii=False, indent=4)
+    return redirect('list_file_page')
+
+@require_GET
+def check_signature(request):
+    file_name = request.GET.get('file_name')
+    sig_file_name=file_name.replace('.txt', '.sig')
+    user_name = request.session.get('user_name')
+    
+    file_path = os.path.join(settings.MEDIA_ROOT, 'uploads', user_name, file_name)
+    sig_file_path = os.path.join(settings.MEDIA_ROOT, 'uploads', user_name, sig_file_name)
+    with open(sig_file_path, 'rb') as sig_file:
+        signature = sig_file.read()
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    digest = hashes.Hash(hashes.SHA256(), backend=default_backend())
+    digest.update(content.encode('utf-8'))  
+    hash_bytes = digest.finalize()
+    
+    public_key_path = os.path.join(settings.MEDIA_ROOT, f"{user_name}_public.pem")
+
+    with open(public_key_path, "rb") as key_file:
+        public_key = serialization.load_pem_public_key(
+            key_file.read(),
+            backend=default_backend()
+        )
+    print("vérification de la signature")
+    try:
+        public_key.verify(signature, hash_bytes, padding.PSS(
+            mgf=padding.MGF1(hashes.SHA256()),
+            salt_length=padding.PSS.MAX_LENGTH
+        ), hashes.SHA256())
+        print("Signature VALIDE")
+    except InvalidSignature:
+        print("Signature INVALIDE")
     return redirect('list_file_page')
