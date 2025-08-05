@@ -33,9 +33,18 @@
                         </a>
                       </td>
                       <td>
-                        <a class="badge badge-danger" href="{% url 'sign_file' %}?file_name={{ file_entry.unsigned_file }}">
-                          Sign
-                        </a>
+                        {% if file_entry.signed_file == "" %}
+                          <a class="badge badge-danger" href="{% url 'sign_file' %}?file_name={{ file_entry.unsigned_file }}">
+                            Sign
+                          </a>
+                        {% else %}
+                          <a 
+                            class="badge badge-success" 
+                            href="{% url 'check_signature' %}?file_name={{ file_entry.unsigned_file }}"
+                          >
+                            Check signed
+                          </a>
+                        {% endif %}
                       </td>
                     </tr>
                   {% endfor %}
@@ -48,4 +57,11 @@
     </div>
   </div>
 </div>
+{% if messages %}
+<script>
+    {% for message in messages %}
+        alert("{{ message }}");
+    {% endfor %}
+</script>
+{% endif %}
 {% endblock %}
